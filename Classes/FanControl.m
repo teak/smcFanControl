@@ -48,6 +48,9 @@ OSStatus status;
 NSDictionary* machine_defaults;
 NSString *authpw;
 
+int current_fav = 0;
+int last_fav = 0;
+
 
 
 #pragma mark **Init-Methods**
@@ -161,6 +164,8 @@ NSString *authpw;
 			[NSNumber numberWithInt:0],@"selbatt",
 			[NSNumber numberWithInt:0],@"selac",
 			[NSNumber numberWithInt:0],@"selload",
+      [NSNumber numberWithInt:0],@"SelMinTemp",
+      [NSNumber numberWithInt:0],@"MinTemp",
 			[NSNumber numberWithInt:0],@"MenuBar",
 			feedURL,@"SUFeedURL",
 			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"MenuColor",
@@ -406,6 +411,18 @@ NSString *authpw;
 		[s_status release];
 		
 	}
+  
+	if (c_temp > [[defaults objectForKey:@"MinTemp"] floatValue]) {
+    if (current_fav != [[defaults objectForKey:@"SelMinTemp"] intValue]) {
+      [self apply_settings:nil controllerindex:[[defaults objectForKey:@"SelMinTemp"] intValue]];
+      current_fav = [[defaults objectForKey:@"SelMinTemp"] intValue];
+    }
+  } else {
+    if (current_fav == [[defaults objectForKey:@"SelMinTemp"] intValue]) {
+      [self apply_settings:nil controllerindex:last_fav];
+      current_fav = last_fav;
+    }
+  }
 }
 
 
@@ -562,20 +579,24 @@ NSString *authpw;
 
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
 		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selbatt"] intValue]];
+    last_fav = [[defaults objectForKey:@"selbatt"] intValue];
+    current_fav = [[defaults objectForKey:@"selbatt"] intValue];
 	}
 }
 
 - (void)powerChangeToAC:(id)sender{
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
 		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selac"] intValue]];
-
+    last_fav = [[defaults objectForKey:@"selac"] intValue];
+    current_fav = [[defaults objectForKey:@"selac"] intValue];
 	}
 }
 
 - (void)powerChangeToACLoading:(id)sender{
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
 		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selload"] intValue]];
-
+    last_fav = [[defaults objectForKey:@"selload"] intValue];
+    current_fav = [[defaults objectForKey:@"selload"] intValue];
 	}	
 }
 

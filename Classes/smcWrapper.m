@@ -174,7 +174,7 @@ static NSDictionary *tsensors = nil;
 	NSString *checksum=[smcWrapper createCheckSum:launchPath];
 	if (![checksum  isEqualToString:smc_checksum]) {
 		NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
-		return;
+		//return;
 	}
     NSArray *argsArray = [NSArray arrayWithObjects: @"-k",key,@"-w",value,nil];
 	NSTask *task;
