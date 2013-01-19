@@ -416,16 +416,20 @@ int default_fav = 0;
 	}
   
 	if (c_temp > [[defaults objectForKey:@"MinTemp"] floatValue]) {
-        if (current_fav != [[defaults objectForKey:@"SelMinTemp"] intValue]) {
-            [self apply_settings:nil controllerindex:[[defaults objectForKey:@"SelMinTemp"] intValue]];
-            current_fav = [[defaults objectForKey:@"SelMinTemp"] intValue];
-        }
-    } else {
-        if (current_fav == [[defaults objectForKey:@"SelMinTemp"] intValue]) {
-            [self apply_settings:nil controllerindex:default_fav];
-            current_fav = default_fav;
-        }
+    if (current_fav != [[defaults objectForKey:@"SelMinTemp"] intValue]) {
+      [self apply_settings:nil controllerindex:[[defaults objectForKey:@"SelMinTemp"] intValue]];
+      current_fav = [[defaults objectForKey:@"SelMinTemp"] intValue];
     }
+  } else {
+    if (current_fav == [[defaults objectForKey:@"SelMinTemp"] intValue]) {
+      if (default_fav != current_fav) {
+        [self apply_settings:nil controllerindex:default_fav];
+      } else {
+        [self apply_settings:nil controllerindex:[[defaults objectForKey:@"SelDefault"] intValue]];
+      }
+      current_fav = default_fav;
+    }
+  }
 }
 
 
