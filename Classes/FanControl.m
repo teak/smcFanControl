@@ -49,7 +49,7 @@ NSDictionary* machine_defaults;
 NSString *authpw;
 
 int current_fav = 0;
-int last_fav = 0;
+int default_fav = 0;
 
 
 
@@ -309,6 +309,9 @@ int last_fav = 0;
 	}
 }
 
+- (IBAction)favorite_selected:(id)sender {
+    default_fav = [FavoritesController selectionIndex];
+}
 
 
 //reads fan data and updates the gui
@@ -413,16 +416,16 @@ int last_fav = 0;
 	}
   
 	if (c_temp > [[defaults objectForKey:@"MinTemp"] floatValue]) {
-    if (current_fav != [[defaults objectForKey:@"SelMinTemp"] intValue]) {
-      [self apply_settings:nil controllerindex:[[defaults objectForKey:@"SelMinTemp"] intValue]];
-      current_fav = [[defaults objectForKey:@"SelMinTemp"] intValue];
+        if (current_fav != [[defaults objectForKey:@"SelMinTemp"] intValue]) {
+            [self apply_settings:nil controllerindex:[[defaults objectForKey:@"SelMinTemp"] intValue]];
+            current_fav = [[defaults objectForKey:@"SelMinTemp"] intValue];
+        }
+    } else {
+        if (current_fav == [[defaults objectForKey:@"SelMinTemp"] intValue]) {
+            [self apply_settings:nil controllerindex:default_fav];
+            current_fav = default_fav;
+        }
     }
-  } else {
-    if (current_fav == [[defaults objectForKey:@"SelMinTemp"] intValue]) {
-      [self apply_settings:nil controllerindex:last_fav];
-      current_fav = last_fav;
-    }
-  }
 }
 
 
@@ -579,7 +582,7 @@ int last_fav = 0;
 
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
 		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selbatt"] intValue]];
-    last_fav = [[defaults objectForKey:@"selbatt"] intValue];
+    default_fav = [[defaults objectForKey:@"selbatt"] intValue];
     current_fav = [[defaults objectForKey:@"selbatt"] intValue];
 	}
 }
@@ -587,7 +590,7 @@ int last_fav = 0;
 - (void)powerChangeToAC:(id)sender{
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
 		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selac"] intValue]];
-    last_fav = [[defaults objectForKey:@"selac"] intValue];
+    default_fav = [[defaults objectForKey:@"selac"] intValue];
     current_fav = [[defaults objectForKey:@"selac"] intValue];
 	}
 }
@@ -595,7 +598,7 @@ int last_fav = 0;
 - (void)powerChangeToACLoading:(id)sender{
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
 		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selload"] intValue]];
-    last_fav = [[defaults objectForKey:@"selload"] intValue];
+    default_fav = [[defaults objectForKey:@"selload"] intValue];
     current_fav = [[defaults objectForKey:@"selload"] intValue];
 	}	
 }
